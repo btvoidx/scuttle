@@ -31,7 +31,7 @@ async def on_voice_state_update(member, before, after):
 		await member.move_to(extended)
 		await extended.set_permissions(member, manage_channels=True, stream=True, mute_members=True, deafen_members=True, move_members=True)
 
-	if before.channel != None and before.channel.category_id == extendable and after.channel.name.lower() != "+":
+	if before.channel != None and before.channel.category_id == extendable and before.channel.name.lower() != "+":
 		extended = before.channel
 		if extended.members == []:
 			await extended.delete()
