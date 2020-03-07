@@ -5,7 +5,7 @@ from os import environ
 TOKEN = environ["TOKEN"]
 client = discord.Client()
 
-extend_alias = ["create channel", "create temp channel", "создать канал", "создать временный канал"]
+extendable = 685923213162577920
 
 @client.event
 async def on_ready():
@@ -25,16 +25,16 @@ async def on_message(message):
 
 @client.event
 async def on_voice_state_update(member, before, after):
-	if after.channel != None and after.channel.name.lower() in "create channel":
-		extended = await after.channel.clone(name=f"t{randint(100000000000, 999999999999)}", reason="Extend")
+	if after.channel != None and after.channel.category_id == extendable and after.channel.name.lower() == "+":
+		extended = await after.channel.clone(name=f"-{randint(100000, 999999)}")
 		print(f"Created new temporary channel {extended}")
 		await member.move_to(extended)
-		print(f"Moved {member} to channel {extended}")
+		await extended.set_permissions(member, manage_channels=True, stream=True, mute_members=True, deafen_members=True, move_members=True)
 
-	if before.channel != None and before.channel.name[0] == "t":
+	if before.channel != None and before.channel.category_id == extendable and after.channel.name.lower() != "+":
 		extended = before.channel
 		if extended.members == []:
-			await extended.delete(reason="Everyone left temporary channel")
+			await extended.delete()
 			print(f"Deleted temporary channel {extended} because there was no users")
 
 
