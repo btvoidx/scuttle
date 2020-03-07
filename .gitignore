@@ -1,0 +1,4 @@
+*.ignore
+*.bat
+*.sublime-project
+*.sublime-workspace
