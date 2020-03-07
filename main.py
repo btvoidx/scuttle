@@ -26,7 +26,7 @@ async def on_message(message):
 @client.event
 async def on_voice_state_update(member, before, after):
 	if after.channel != None and after.channel.category_id == extendable and after.channel.name.lower() == "+":
-		extended = await after.channel.clone(name=f"{member.nick}'s lobby")
+		extended = await after.channel.clone(name=f"{member.name}'s voice channel")
 		print(f"Created new temporary channel {extended}")
 		await member.move_to(extended)
 		await extended.set_permissions(member, manage_channels=True, stream=True, deafen_members=True)
