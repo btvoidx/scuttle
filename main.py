@@ -13,7 +13,7 @@ def randstr(list):
 
 @client.event
 async def on_ready():
-	print(f"We have logged in as {client.user}\n")
+	print(f"We have logged in as {client.user}")
 
 
 
@@ -22,8 +22,8 @@ async def on_message(message):
 	if message.author == client.user:
 		return
 
-	if message.content.startswith('!hello'):
-		await message.channel.send('Hello!')
+	if message.content.startswith(f'{client.user}'):
+		await message.channel.send("*Runs away*")
 
 
 
