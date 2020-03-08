@@ -29,7 +29,7 @@ async def on_voice_state_update(member, before, after):
 		extended = await after.channel.clone(name=f"{member.name}'s voice channel")
 		print(f"Created new temporary channel {extended}")
 		await member.move_to(extended)
-		await extended.set_permissions(member, manage_channels=True, stream=True, deafen_members=True)
+		await extended.set_permissions(member, manage_channels=True, stream=True, move_members=True)
 
 	if before.channel != None and before.channel.category_id == extendable and before.channel.name.lower() != "+":
 		extended = before.channel
