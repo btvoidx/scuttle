@@ -6,6 +6,10 @@ TOKEN = environ["TOKEN"]
 client = discord.Client()
 
 extendable = 685923213162577920
+places = ["lounge", "lodge", "voice channel", "room"]
+
+def randstr(list):
+	return list[randint(0, len(list) - 1)]
 
 @client.event
 async def on_ready():
@@ -26,7 +30,7 @@ async def on_message(message):
 @client.event
 async def on_voice_state_update(member, before, after):
 	if after.channel != None and after.channel.category_id == extendable and after.channel.name.lower() == "+":
-		extended = await after.channel.clone(name=f"{member.name}'s voice channel")
+		extended = await after.channel.clone(name=f"{member.name}'s {randstr(places)}")
 		print(f"Created new temporary channel {extended}")
 		await member.move_to(extended)
 		await extended.set_permissions(member, manage_channels=True, stream=True, move_members=True)
