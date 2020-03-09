@@ -15,7 +15,8 @@ def randstr(list):
 @client.event
 async def on_ready():
 	print(f"We have logged in as {client.user}")
-	await client.change_presence(activity=status)
+	x = await client.change_presence(activity=status)
+	print(x)
 	print(f"Set status to {status}")
 
 
