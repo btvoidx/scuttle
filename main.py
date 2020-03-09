@@ -7,7 +7,7 @@ client = discord.Client()
 
 extendable = 685923213162577920
 places = ["lounge", "lodge", "voice channel", "room"]
-status = discord.CustomActivity("Fleeing from a jungler")
+status = discord.Activity("Fleeing from a jungler")
 
 def randstr(list):
 	return list[randint(0, len(list) - 1)]
@@ -26,8 +26,8 @@ async def on_message(message):
 	if message.author == client.user:
 		return
 
-	if f"{client.user}" in message.content:
-		await message.channel.send("*Fleeing away*")
+	if f"{client.mention}" in message.content:
+		await message.channel.send("*Flees away*")
 
 
 
