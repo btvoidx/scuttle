@@ -25,7 +25,7 @@ async def on_message(message):
 	if message.author == client.user:
 		return
 
-	if f"{client.mention}" in message.content:
+	if f"{client.user.mention}" in message.content:
 		await message.channel.send("*Flees away*")
 
 
