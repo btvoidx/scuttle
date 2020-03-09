@@ -7,7 +7,7 @@ client = discord.Client()
 
 extendable = 685923213162577920
 places = ["lounge", "lodge", "voice channel", "room"]
-status = discord.Game(name="in the river")
+status = discord.Activity(name="Fleeing from jungler", type=discord.ActivityType.custom)
 
 def randstr(list):
 	return list[randint(0, len(list) - 1)]
@@ -15,8 +15,7 @@ def randstr(list):
 @client.event
 async def on_ready():
 	print(f"We have logged in as {client.user}")
-	x = await client.change_presence(activity=status)
-	print(x)
+	await client.change_presence(activity=status)
 	print(f"Set status to {status}")
 
 
