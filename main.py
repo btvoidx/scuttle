@@ -7,7 +7,7 @@ client = discord.Client()
 
 extendable = 685923213162577920
 places = ["lounge", "lodge", "voice channel", "room"]
-status = discord.Activity(name="jungler's pathing", type=discord.ActivityType.watching)
+status = discord.Game(name="in the river")
 
 def randstr(list):
 	return list[randint(0, len(list) - 1)]
