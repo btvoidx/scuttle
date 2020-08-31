@@ -14,7 +14,7 @@ class bot(discord.Client):
 		if (channel := after.channel) and channel.category_id in config.get('extendables') and channel.name.lower() == "+":
 			extended = await channel.clone(name=f"{member.name}'s {choice(config.get('extended_names'))}")
 			await member.move_to(extended)
-			await extended.set_permissions(member, manage_channels = True, move_members = True, mute_members = True, deafen_members = True)
+			await extended.set_permissions(member, manage_channels = True)
 			print(f"Created new temporary channel {extended}")
 
 		if (channel := before.channel) and channel.category_id in config.get('extendables') and channel.name.lower() != "+":
