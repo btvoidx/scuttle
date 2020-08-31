@@ -1,49 +1,46 @@
+#
+#	Sorry for 0 comments on code.
+#
 import discord
-from random import randint
-from os import environ
+from discord import utils
+from random import choice
+from config import config
 
-TOKEN = environ["TOKEN"]
-client = discord.Client()
+class bot(discord.Client):
+	async def on_ready(self):
+		print(f'Started bot: {client.user}')
 
-extendable = 685923213162577920
-places = ["lounge", "lodge", "voice channel", "room"]
-#status = discord.Game(name="in the river")
+	async def on_voice_state_update(self, member, before, after):
+		if (channel := after.channel) and channel.category_id in config.get('extendables') and channel.name.lower() == "+":
+			extended = await channel.clone(name=f"{member.name}'s {choice(config.get('extended_names'))}")
+			await member.move_to(extended)
+			await extended.set_permissions(member, manage_channels = True, move_members = True, mute_members = True, deafen_members = True)
+			print(f"Created new temporary channel {extended}")
 
-def randstr(list):
-	return list[randint(0, len(list) - 1)]
+		if (channel := before.channel) and channel.category_id in config.get('extendables') and channel.name.lower() != "+":
+			if channel.members == []:
+				await channel.delete()
+				print(f"Deleted temporary channel {channel} because there was no users")
 
-@client.event
-async def on_ready():
-	print(f"We have logged in as {client.user}")
-	#await client.change_presence(activity=status)
-	#print(f"Set status to {status}")
+	async def on_raw_reaction_add(self, payload):
+		if payload.message_id in config.get('reaction_role_sync'):
+			guild = self.get_guild(payload.guild_id)
+			member = guild.get_member(payload.user_id)
 
+			if (role_id := config.get('reaction_role_sync')[payload.message_id].get(str(payload.emoji))):
+				role = utils.get(guild.roles, id = role_id)
+				await member.add_roles(role)
+				print(f"Gave {role} to {member}")
 
+	async def on_raw_reaction_remove(self, payload):
+		if payload.message_id in config.get('reaction_role_sync'):
+			guild = self.get_guild(payload.guild_id)
+			member = guild.get_member(payload.user_id)
 
-@client.event
-async def on_message(message):
-	if message.author == client.user:
-		return
+			if (role_id := config.get('reaction_role_sync')[payload.message_id].get(str(payload.emoji))):
+				role = utils.get(guild.roles, id = role_id)
+				await member.remove_roles(role)
+				print(f"Took {role} from {member}")
 
-	if f"{client.user.mention}" in message.content:
-		await message.channel.send("*Flees away*")
-
-
-
-@client.event
-async def on_voice_state_update(member, before, after):
-	if after.channel != None and after.channel.category_id == extendable and after.channel.name.lower() == "+":
-		extended = await after.channel.clone(name=f"{member.name}'s {randstr(places)}")
-		print(f"Created new temporary channel {extended}")
-		await member.move_to(extended)
-		await extended.set_permissions(member, manage_channels=True, stream=True, move_members=True)
-
-	if before.channel != None and before.channel.category_id == extendable and before.channel.name.lower() != "+":
-		extended = before.channel
-		if extended.members == []:
-			await extended.delete()
-			print(f"Deleted temporary channel {extended} because there was no users")
-
-
-
-client.run(TOKEN)
+client = bot()
+client.run(config.get('token'))

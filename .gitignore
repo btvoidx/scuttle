@@ -1,4 +1,3 @@
+__pycache__/
 *.ignore
-*.bat
-*.sublime-project
-*.sublime-workspace
+config.py
